@@ -34,7 +34,7 @@
       };  
       function es3(o){
         for(p in o)
-          this[p] = (typeof(o[p]) == 'object')? new Clone(o[p]) : o[p];
+          this[p] = (typeof(o[p]) == 'object')? new arguments.callee(o[p]) : o[p];
       };
       
       return  ('object'!==typeof o)? ctor.unlink(o) : (Object.create? es5(o) : new es3(o));
