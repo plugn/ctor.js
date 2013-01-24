@@ -47,7 +47,7 @@
         throw new Error('ctor.spawn() : konstr is not a Function');
       function fn(){};
       var instance = new fn();
-      konstr.apply( instance, [].slice(args) );
+      konstr.apply( instance, [].concat(args) );
       for (var prop in konstr.prototype)
         instance[ prop ] = ctor.clone( konstr.prototype[prop] );
       return instance;
