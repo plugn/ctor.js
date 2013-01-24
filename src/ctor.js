@@ -43,7 +43,7 @@
     },
     
     // Classic OOP inheritance 
-    // instance has special '$parent' key of Instance points to a parent object
+    // instance has a '$parent' key representing superclass with its methods
     // var o = ctor.inherit((Function or Object) [TopClass, ..] MidClass, BaseClass);
     inherit: function() {
       var args = [].slice.call(arguments);
