@@ -13,9 +13,10 @@ getNested('p.a.t.i', {p:{a:{t:{h:[1],i:[2]}}}}, '*' )
 
 */
 
-var getNested = function(path, root, def){
-  var key, val = root || this, arr = String(path).split('.');
-  while (key = arr.shift())
-    val = 'undefined' == typeof val[key]? ('undefined' == typeof def? null : def) : val[key];
+function getNested(path, root, def){
+  var key, val = !!root? root : this, arr = String(path).split('.');
+  while ((key = arr.shift()) && 'object' == typeof val && val) {
+    val = 'undefined' == typeof val[key]? ('undefined' == typeof def? false : def) : val[key];
+  }
   return val;  
-}  
+}
