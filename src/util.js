@@ -1,5 +1,5 @@
 /*
-tries to get deep nested property an object, 
+tries to get deep nested property of passed object, 
 if found returns it, else returns `def` argument
 
 getNested('p.a.t.h', {p:{a:{t:{h:[1],i:[2]}}}}, '*' )
