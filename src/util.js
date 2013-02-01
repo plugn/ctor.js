@@ -27,7 +27,13 @@
       return function(){ 
         fn.apply(context, args.concat([].slice.call(arguments))) 
       };
-    }
+    },
+    
+    // sample of call as constructor guaranteed
+    factory: function(){ 
+      return new arguments.callee([].slice.call(arguments)); 
+    }     
+    
   };  
 
 }).call(this);
