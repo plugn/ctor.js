@@ -25,14 +25,4 @@
       fn.apply(context, args.concat([].slice.call(arguments))) 
     };
   }
-  
 
-  // sample of call as constructor guaranteed
-  function factory(){ 
-    if (!this.__asConstructor__)
-      return new arguments.callee([].slice.call(arguments)); 
-  }
-  
-  factory.prototype = {
-    __asConstructor__ = true;
-  }
