@@ -1,6 +1,8 @@
 /*
- * @title form data dumper module
- * @dependencies underscore.js
+ @title form data dumper module
+ @dependencies underscore.js
+ @description carefully collects fields' data of a form passed in 
+ @why because of jQuery.serializeArray() don't works with radio and checkboxes correctly
 */
 
 
@@ -21,6 +23,9 @@
 
 	var API = {
 		collect: function(aForm) {
+			if ( !(aForm instanceof HTMLFormElement) ) 
+				throw new Error('aForm is not an HTMLFormElement');
+
 			var formData = _.chain(aForm.elements)
 				.map(dumpField)
 				.filter(_.identity) // remove nameless fields 
