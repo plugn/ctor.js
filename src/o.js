@@ -23,7 +23,6 @@ var o = o || {};
 
     // has constructor? use it or an empty function
     var constructor = ('function' === typeof proto.constructor) ? proto.constructor : function(){};
-    constructor = proto.constructor;
     delete proto.constructor;
 
     // has extends key? use it as a parent for inheritance
