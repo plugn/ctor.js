@@ -26,7 +26,7 @@ var o = o || {};
     delete proto.constructor;
 
     // has extends key? use it as a parent for inheritance
-    var parent = ('function' === typeof proto.extends) ? proto.extends : null;
+    var parent = (/^object|function$/.test(typeof proto.extends) ) ? proto.extends : null;
     delete proto.extends;
     if (parent) {
       return o.inherit(constructor, parent);
