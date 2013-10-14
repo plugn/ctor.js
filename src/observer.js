@@ -1,4 +1,3 @@
-
 function Observer() {}
 
 Object.defineProperty(Observer.prototype, 'watch', {
@@ -6,9 +5,6 @@ Object.defineProperty(Observer.prototype, 'watch', {
 	configurable: true,
 	writable: false,
 	value: function(prop, handler) {
-		enumerable: false,
-		configurable: true,
-		writable: false,
 		var 
 			oldVal = this[prop],
 			newVal = oldVal,
