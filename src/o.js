@@ -1,7 +1,18 @@
 var o = o || {};
 
 (function(o) {
-
+  
+  o.extend = function (target, source) {
+    for (var prop in source) if (source.hasOwnProperty(prop)) {
+      target[prop] = source[prop];
+    }
+    return target;
+  };  
+  
+  o.ctor = function oConstructor(){
+    return this.class.super.apply(this, arguments);
+  };
+  
   o.inherit = (function(){
     function F() {}
     return function (child, parent) {
@@ -11,6 +22,7 @@ var o = o || {};
       child.prototype = new F();
       child.prototype.constructor = child;
       child.super = parent.prototype;
+      child.prototype.class = child;
       return child;
     };
   }) ();
