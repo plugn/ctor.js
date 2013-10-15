@@ -21,7 +21,6 @@ Object.defineProperty(Observer.prototype, 'watch', {
 		Object.defineProperty(this, prop, {
 			enumerable: true,
 			configurable: true,
-			writable: true,
 			get: getter,
 			set: setter			
 		});
