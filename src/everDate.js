@@ -21,7 +21,7 @@ var everDate = (function(){
 
     // monads
     function toNumber(t){
-      var a; return (a = String(t).match(/\d+/gi)) && (parseInt(a.join(''), 10) || 0);
+      var a; return (a = String(t).match(/\d+/g)) && (parseInt(a.join(''), 10) || 0);
     }
     function restrict(v, min, max, def) {
       var num = toNumber(v);
