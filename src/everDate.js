@@ -46,7 +46,7 @@ var everDate = (function(){
     // public API
     return {
       render: function everDate__render(y,m,d){
-        return makeValid( [makeYear(y), makeMonth(m), makeDate(d)] );
+        return makeValid( [makeYear(y), makeMonth(m), makeDate(d)].join('-') );
       }
     };
 
