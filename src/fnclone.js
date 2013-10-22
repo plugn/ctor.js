@@ -43,7 +43,7 @@ s.match(/function\s+([^(]+)\(([^)]+)\)\s?\{.*}$/g) // ok
 // w/args
 (/function\s+([^(]*)\(([^)]+)\)\s?\{(.*)}$/gmi).exec(s)
 
-function fnParse( func ) {
+function parseFunc( func ) {
   var reFnParse = /function\s+([^(]*)\(([^)]+)\)\s?\{(.*)}$/gmi;
   var s = func.toString().replace(/^\s|\s$/g, '');
   var m = reFnParse.exec(s);
@@ -54,4 +54,12 @@ function fnParse( func ) {
       body : m[3] || ''
   }
   return conf;
+}
+
+function cloneFunc( func ) {
+  
+  var conf = parseFunc( func );
+  var clone = Function.prototype.constructor.apply(this, [].concat(conf.args, conf.body));
+  /* todo: static props   */
+  return clone;
 }
