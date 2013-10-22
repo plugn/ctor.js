@@ -1,7 +1,7 @@
 /**
  *  @title cloning a Function
  *  @author  Max L Dolgov 
- *  #contact bananafishbone at gmail dot com
+ *  @contact bananafishbone at gmail dot com
  */
 
 function cloneFunc( func ) {
