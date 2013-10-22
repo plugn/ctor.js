@@ -40,3 +40,5 @@ s.match(/function\s+([^(]+)\(([^)]+)\)\s?\{.*}$/g) // ok
 
 // parse
 (/function\s+([^(]*)\([^)]+\)\s?\{(.*)}$/gi).exec(s)
+// w/args
+(/function\s+([^(]*)\(([^)]+)\)\s?\{(.*)}$/gmi).exec(s)
