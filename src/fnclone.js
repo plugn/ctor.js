@@ -37,3 +37,6 @@ s.match(/function\s+([^(]+)\(([^)]+)\)\s?\{.*}$/g) // match
 
 var s = a1.toString().replace(/^\s|\s$/g,''); 
 s.match(/function\s+([^(]+)\(([^)]+)\)\s?\{.*}$/g) // ok
+
+// parse
+(/function\s+([^(]*)\([^)]+\)\s?\{(.*)}$/gi).exec(s)
