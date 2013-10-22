@@ -42,3 +42,16 @@ s.match(/function\s+([^(]+)\(([^)]+)\)\s?\{.*}$/g) // ok
 (/function\s+([^(]*)\([^)]+\)\s?\{(.*)}$/gi).exec(s)
 // w/args
 (/function\s+([^(]*)\(([^)]+)\)\s?\{(.*)}$/gmi).exec(s)
+
+function fnParse( func ) {
+  var reFnParse = /function\s+([^(]*)\(([^)]+)\)\s?\{(.*)}$/gmi;
+  var s = func.toString().replace(/^\s|\s$/g, '');
+  var m = reFnParse.exec(s);
+  if (!m || !m.length) return; 
+  var conf = {
+      name : m[1] || '',
+      args : m[2].replace(/\s+/g,'').split(','),
+      body : m[3] || ''
+  }
+  return conf;
+}
