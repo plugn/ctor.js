@@ -18,10 +18,10 @@ var o = o || {};
     return function (child, parent) {
       var proto = ('function' === typeof parent) ? 
         parent.prototype : ('object' === typeof parent ? parent : {} );
-      F.prototype = parent.prototype;
+      F.prototype = proto;
       child.prototype = new F();
       child.prototype.constructor = child;
-      child.super = parent.prototype;
+      child.super = proto;
       child.prototype.class = child;
       return child;
     };
