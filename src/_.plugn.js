@@ -1,7 +1,7 @@
 // @title plugins for underscore.js
 // @author Max L Dolgov 
 // @url http://github.com/plugn
-
+// underscore plugin 
 _.mixin({
 	capitalize: function(string) {
 		return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
