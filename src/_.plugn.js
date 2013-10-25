@@ -14,22 +14,23 @@ _.mixin({
 	toNumber: function(t){
 		var a; return (a = String(t).match(/\d+/g)) && (parseInt(a.join(''), 10) || 0);
 	},
+
 	// results hash-items {key:value} 
 	filterHash: function(obj, iterator, context) {
-		var results = [];
+		var results = {};
 		if (obj == null) return results;
 		_.each(obj, function(value, index, list) {
-			var hVal = {}; hVal[index] = value;
-			if (iterator.call(context, value, index, list)) results.push(hVal);
+			// var hVal = {}; hVal[index] = value;
+			if (iterator.call(context, value, index, list)) results[index] = value;
 		});
 		return results;
 	},
-	// results hash-items {key:value}
 	rejectHash:  function(obj, iterator, context) {
 		return _.filterHash(obj, function(value, index, list) {
 			return !iterator.call(context, value, index, list);
 		}, context);
 	},
+
 	getNested: function(path, def, root){
 		var key, val = !!root? root : this, arr = String(path).split('.');
 		while ((key = arr.shift()) && 'object' == typeof val && val) {
