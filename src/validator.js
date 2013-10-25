@@ -20,27 +20,35 @@ var validator = (function(){
 					return val.replace(/(^\s+|\s+$)/g, '');
 				case 'number':
 					return (0===val || !isFinite(val))? 0 : val;
-				case 'object':
-					return _.isEmpty(val);  
+				default:
+					return val;  
 			}
 	}
 
+	// native validation rules
 	var vRules = {
 		base: vCast
 	}
 
 
-	function Field(name, value, rules){
-		// console.log('Field()', name, value);		
+	function Field(name, value, conf){
+		conf = conf || {};
+		console.log(' * Field('+name+')', value, conf);		
 		this.name = name;
 		this.value = value;
+
+		// built-in value cast
 		this.castValue = vCast(value);
+
+		// castResult = castFunc(castValue)
+		this.castFunc = ('function' == lcType(conf.castFunc) && conf.castFunc) || undefined; 
+		this.castResult = undefined;
 	
 		this.checked = false;
 		this.resolved = false;
 		this.rejected = false;
 
-		this.setRules( rules );
+		this.setRules( conf.rules );
 
 	}
 
@@ -87,7 +95,7 @@ var validator = (function(){
 
 	Field.prototype.check = function(){
 		var self = this;
-		console.log('check() self.rules:', self.rules, ' self: ', self);
+		console.log('check() self: ', self);
 		self._checkRules(self.rules);
 
 		var test = {};
@@ -98,6 +106,10 @@ var validator = (function(){
 		var pass = _.every(test, _.identity);
 		self.rejected = !(self.resolved = pass);
 		self.checked = true;
+
+		if (self.castFunc && self.checked) {
+			self.castResult = self.castFunc(self.castValue);
+		}
 
 		return self.resolved;
 	}
