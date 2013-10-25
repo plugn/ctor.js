@@ -1,6 +1,8 @@
 /*
  @title form data dumper module
- @dependencies underscore.js
+ @dependencies 
+  * underscore.js, 
+  * validator.js
  @description carefully collects fields' data of a form passed in 
  @why because of jQuery.serializeArray() doesn't work with radio and checkboxes correctly
 */
