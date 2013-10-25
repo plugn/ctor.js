@@ -8,6 +8,8 @@
 
 (function formDump(scope){
 
+	var splitter = '__';
+
 	function dumpField(el) {
 		var fName = el.getAttribute('name'),
 			fType = el.getAttribute('type');
@@ -45,8 +47,106 @@
 				.value();	
 
 			return formData;
+		},
+
+		// group collected data  
+		group: function( formData ) {
+			var fieldSet = {};
+
+			_.each(formData, function(item, key, list){ 
+				var couple = key.split(splitter);
+
+				if ( 1 < couple.length  ) {
+					if ( !(_.has(fieldSet, couple[0])) ) {
+						fieldSet[couple[0]] = {};
+					}
+
+					fieldSet[couple[0]] [key] = item;
+					// fieldSet[couple[0]] [couple[1]] = item;
+
+				} else {
+					fieldSet[key] = item;
+			  }
+
+			});
+
+			return fieldSet;
+
+		},
+
+		// TODO : cast functions and reflecting fields
+		
+		// validate grouped data
+		validate: function( fGroups, conf ) {
+
+			function typer (g, k){
+				return ('object' == typeof g) && (null !== g);
+			}
+
+			var 
+				self = this,
+				conf = conf || {},
+				mFields = _.filterHash(fGroups, typer),
+				sFields = _.rejectHash(fGroups, typer);
+
+			// console.log(sFields, mFields);
+
+			// simple validated list
+			var svItems = self.checkList( sFields );
+
+			// mark them easily
+			_.each(svItems, function(vItem){
+				self.markField(vItem);
+				self.markAbout(vItem);
+			}); 
+
+			// multi-fields 
+			_.each( mFields, function(fset, fabout){
+
+				var mvItems = self.checkList( fset );
+				var ok = _.every(mvItems, function(mvItem){ return mvItem.resolved; });
+				_.each(mvItems, function(vItem){
+					self.markField(vItem);
+					self.markAbout({ name: fabout, resolved: ok})
+				})
+			});
+		},
+
+		checkList: function( sFields ) {
+			var self = this;
+			var vList = {};
+			_.each( sFields, function(fval, fkey){
+				var vItem = new validator.Field(fkey, fval);
+				if (vItem) {
+					vItem.check();
+					vList[fkey] = vItem;
+				}
+			});
+
+			return vList;
+		},
+
+		// toggle validation messages / indicators
+		markField: function(vField) {
+			$('[name="' + vField.name + '"]').toggleClass('field-warn', !vField.resolved);
+		},
+
+		// toggle validation messages / indicators
+		markAbout: function(vField, message) {
+			// console.log(' * markAbout() ', vField);
+			var 
+				ok = vField.resolved,
+				p = $('[data-about="' + vField.name + '"]');
+
+			p.toggleClass('warn', !ok).toggleClass('ok', !!ok); 
+			if (message) {
+				p.find('.warn-reason').text(message);
+			}
 		}
-	}		
+
+
+
+	};		
 
 	// export module
 	_.extend(scope, API);
