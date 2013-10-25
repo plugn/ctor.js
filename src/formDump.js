@@ -7,7 +7,6 @@
  @why because of jQuery.serializeArray() doesn't work with radio and checkboxes correctly
 */
 
-
 (function formDump(scope){
 
 	var splitter = '__';
@@ -76,8 +75,6 @@
 
 		},
 
-		// TODO : cast functions and reflecting fields
-		
 		// validate grouped data
 		validate: function( fGroups, conf ) {
 
@@ -87,13 +84,14 @@
 
 			var 
 				self = this,
-				conf = conf || {},
 				mFields = _.filterHash(fGroups, typer),
 				sFields = _.rejectHash(fGroups, typer);
 
+			self.conf = conf || {};
+
 			// console.log(sFields, mFields);
 
-			// simple validated list
+			// simple fields validated list
 			var svItems = self.checkList( sFields );
 
 			// mark them easily
@@ -114,11 +112,12 @@
 			});
 		},
 
-		checkList: function( sFields ) {
+		checkList: function( vFields ) {
 			var self = this;
 			var vList = {};
-			_.each( sFields, function(fval, fkey){
-				var vItem = new validator.Field(fkey, fval);
+			_.each( vFields, function(fval, fkey){
+				var vConf = _.getNested(fkey, null, self.conf);
+				var vItem = new validator.Field(fkey, fval, vConf);
 				if (vItem) {
 					vItem.check();
 					vList[fkey] = vItem;
@@ -128,9 +127,16 @@
 			return vList;
 		},
 
+
 		// toggle validation messages / indicators
 		markField: function(vField) {
-			$('[name="' + vField.name + '"]').toggleClass('field-warn', !vField.resolved);
+			var f = $('[name="' + vField.name + '"]');
+			f.toggleClass('field-warn', !vField.resolved);
+
+			// reflect cast right
+			if (vField.castFunc && (null != vField.castResult)) {
+				f.val(vField.castResult);
+			};
 		},
 
 		// toggle validation messages / indicators
