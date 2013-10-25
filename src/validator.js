@@ -31,8 +31,10 @@ var validator = (function(){
 
 
 	function Field(name, value, rules){
+		// console.log('Field()', name, value);		
 		this.name = name;
 		this.value = value;
+		this.castValue = vCast(value);
 	
 		this.checked = false;
 		this.resolved = false;
