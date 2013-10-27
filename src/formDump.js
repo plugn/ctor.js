@@ -89,8 +89,6 @@
 
 			self.conf = conf || {};
 
-			// console.log(sFields, mFields);
-
 			// simple fields validated list
 			var svItems = self.checkList( sFields );
 
