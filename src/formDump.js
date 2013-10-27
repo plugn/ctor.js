@@ -126,12 +126,10 @@
 			return vList;
 		},
 
-
 		// toggle validation messages / indicators
 		markField: function(vField) {
 			var f = $('[name="' + vField.name + '"]');
 			f.toggleClass('field-warn', !vField.resolved);
-
 			// reflect cast right
 			if (vField.castFunc && (null != vField.castResult)) {
 				f.val(vField.castResult);
