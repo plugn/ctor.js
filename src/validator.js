@@ -39,10 +39,7 @@ var validator = (function(){
 
 		// built-in value cast
 		this.castValue = vCast(value);
-
-		// castResult = castFunc(castValue)
 		this.castFunc = ('function' == lcType(conf.castFunc) && conf.castFunc) || undefined; 
-		this.castResult = undefined;
 	
 		this.checked = false;
 		this.resolved = false;
@@ -101,17 +98,17 @@ var validator = (function(){
 		self._checkRules(self.rules);
 
 		var test = {};
+		self.castValue = (self.castFunc && self.castFunc(self.castValue)) || 
+											(null != self.castValue? self.castValue : self.value);
+
 		_.each(self.rules, function(rule, name){
-			test[ name ] = rule(self.value)
+			test[ name ] = rule(self.castValue);
+			// test[ name ] = rule(self.value)
 		});
 
 		var pass = _.every(test, _.identity);
 		self.rejected = !(self.resolved = pass);
 		self.checked = true;
-
-		if (self.castFunc && self.checked) {
-			self.castResult = self.castFunc(self.castValue);
-		}
 
 		return self.resolved;
 	}
