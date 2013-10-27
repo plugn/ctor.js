@@ -33,7 +33,7 @@ var validator = (function(){
 
 	function Field(name, value, conf){
 		conf = conf || {};
-		console.log(' * Field('+name+')', value, conf);		
+		// console.log(' * Field('+name+')', value, conf);		
 		this.name = name;
 		this.value = value;
 
@@ -64,12 +64,14 @@ var validator = (function(){
 		var self = this;
 		self.rules = [];
 
+
+		// must be an array even if length of 1
+		if ( _.contains(['string', 'function'], lcType(rules)) ) rules = [].concat(rules);
+
 		// if array : keynames of vRules
 		if (_.isEmpty(rules)) {
 			self.rules.push(vRules.base);
 		} else {
-			// must be an array even if length of 1
-			if ('string' == lcType(rules)) rules = [].concat(rules);
 			self._checkRules(rules);
 
 			_.each(rules, function(rule, key){ 
