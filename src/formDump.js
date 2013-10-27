@@ -107,8 +107,9 @@
 				var ok = _.every(mvItems, function(mvItem){ return mvItem.resolved; });
 				_.each(mvItems, function(vItem){
 					self.markField(vItem);
-					self.markAbout({ name: fabout, resolved: ok})
 				})
+				self.markAbout({ name: fabout, resolved: ok})
+
 			});
 		},
 
