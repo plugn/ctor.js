@@ -7,6 +7,7 @@
  @why because of jQuery.serializeArray() doesn't work with radio and checkboxes correctly
 */
 
+
 (function formDump(scope){
 
 	var splitter = '__';
@@ -89,6 +90,8 @@
 
 			self.conf = conf || {};
 
+			// console.log(sFields, mFields);
+
 			// simple fields validated list
 			var svItems = self.checkList( sFields );
 
@@ -126,18 +129,21 @@
 			return vList;
 		},
 
+
 		// toggle validation messages / indicators
 		markField: function(vField) {
 			var f = $('[name="' + vField.name + '"]');
 			f.toggleClass('field-warn', !vField.resolved);
+
 			// reflect cast right
-			if (vField.castFunc && (null != vField.castResult)) {
-				f.val(vField.castResult);
+			if (vField.castFunc && (null != vField.castValue)) {
+				f.val(vField.castValue);
 			};
 		},
 
 		// toggle validation messages / indicators
 		markAbout: function(vField, message) {
+			// console.log(' * markAbout() ', vField);
 			var 
 				ok = vField.resolved,
 				p = $('[data-about="' + vField.name + '"]');
