@@ -140,7 +140,6 @@
 
 		// toggle validation messages / indicators
 		markAbout: function(vField, message) {
-			// console.log(' * markAbout() ', vField);
 			var 
 				ok = vField.resolved,
 				p = $('[data-about="' + vField.name + '"]');
