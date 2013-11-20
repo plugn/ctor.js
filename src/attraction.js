@@ -1,11 +1,18 @@
+/*
+ * @title attraction 
+ * @description declarative DOM event binding via attributes
+ * @usage
+ * html: <element on-click="app.method(this, event)">
+ * javascript: attraction.setup({'app': this, 'any': {'key': value} });
+**/
 
 (function(scope) {
 
   var evPrefix = 'on-';
   var evRgx = new RegExp('^' + evPrefix);
-  var removeSrc = false; //true;
+  var removeSrc = true;
 
-  scope.util = {
+  var self = {
 
     addEvent: function addEvent(el, type, fn, capture){
       if (el.addEventListener) {
@@ -25,18 +32,18 @@
       return binding;
     },
 
-    setDOMEvents: function( conf ){
-      var evtList = scope.util.scanUIEvents();
+    setup: function( conf ){
+      var evtList = self.scanUIEvents();
       // console.log(' * setDOMEvents() evtList : \n %o', evtList); 
       _.each(evtList, function(evt){
-        var fn = scope.util.getBinding(evt, conf);
-        scope.util.addEvent(evt.el, evt.name, fn);
+        var fn = self.getBinding(evt, conf);
+        self.addEvent(evt.el, evt.name, fn);
         if (removeSrc) evt.el.removeAttribute(evPrefix + evt.name);   
       });
     },
 
-    // scan DOM for pseudo events marked as [data-ui-on${event}]
-    scanUIEvents: function( ctx, conf ) {
+    // scan DOM for pseudo events marked as [on-{event}]
+    scanUIEvents: function( ctx ) {
       ctx = ctx || document.documentElement;
       var events = 'submit,change,click'; 
       // ',dblclick,blur,focus,input,mousedown,mouseup,keydown,keypress,keyup';
@@ -48,7 +55,6 @@
               var o = {};             
               if (0 === String(a.nodeName).indexOf(evPrefix)) {
                 var el = a.ownerElement || null;
-                // if (removeSrc && el) el.removeAttribute(a.nodeName);
                 return {
                   el: el,
                   name: String(a.nodeName || a.name).replace(evRgx, ''),
@@ -62,7 +68,9 @@
         return onv;
     }
 
-  }
+  };
+
+  scope.attraction = self;
 
 
 
