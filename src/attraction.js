@@ -1,5 +1,4 @@
 
-
 (function(scope) {
 
   var evPrefix = 'on-';
