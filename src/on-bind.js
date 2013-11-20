@@ -4,6 +4,7 @@
 
   var evPrefix = 'on-';
   var evRgx = new RegExp('^' + evPrefix);
+  var removeSrc = false; //true;
 
   scope.util = {
 
@@ -13,40 +14,44 @@
       } else {
         el.attachEvent('on' + type, fn);
       }
-      return fn;
     },
 
-    setDOMEvents: function(){
-      console.log(' * setDOMEvents() ');
-      
+    getBinding: function( evt, conf ){
+      var 
+        fArgs = [].concat(_.keys(conf), 'event', evt.value),
+        F = Function.prototype.constructor.apply(null, fArgs),
+        bParams = [].concat(F, evt.el, _.values(conf)),
+        binding = _.bind.apply( null, bParams );
+      // console.log(' getBinding() \n conf: %o \n fArgs: %o \n bParams: %o ', conf, fArgs, bParams);
+      return binding;
+    },
+
+    setDOMEvents: function( conf ){
       var evtList = scope.util.scanUIEvents();
-      console.log(' = evtList : \n %o', evtList); 
-
+      // console.log(' * setDOMEvents() evtList : \n %o', evtList); 
       _.each(evtList, function(evt){
-        var fn = _.bind( Function('event', evt.value ), evt.el );
-        scope.util.addEvent(evt.el, evt.name, fn)
-        
+        var fn = scope.util.getBinding(evt, conf);
+        scope.util.addEvent(evt.el, evt.name, fn);
+        if (removeSrc) evt.el.removeAttribute(evPrefix + evt.name);   
       });
-
     },
 
     // scan DOM for pseudo events marked as [data-ui-on${event}]
     scanUIEvents: function( ctx, conf ) {
       ctx = ctx || document.documentElement;
-      var events = 'click,submit,change'; 
-      
+      var events = 'submit,change,click'; 
+      // ',dblclick,blur,focus,input,mousedown,mouseup,keydown,keypress,keyup';
       var evQuery = _.map(events.split(','), function(ev){ return '['+evPrefix+ev+']'; }).join(',');
-      console.log(' evQ: ' , evQuery);
-
-      // var onv = $('[onclick],[onsubmit],[onchange]', ctx)
       var onv = $(evQuery, ctx)
-        .map(function(){
+        .map(function(){        
           return _.chain(this.attributes)
             .map(function(a,n){ 
-              var o = {};  
+              var o = {};             
               if (0 === String(a.nodeName).indexOf(evPrefix)) {
+                var el = a.ownerElement || null;
+                // if (removeSrc && el) el.removeAttribute(a.nodeName);
                 return {
-                  el: (a.ownerElement || null),
+                  el: el,
                   name: String(a.nodeName || a.name).replace(evRgx, ''),
                   value: (a.nodeValue || a.value)
                 }
@@ -54,18 +59,8 @@
             })
             .filter(_.identity)
             .value()    
-        });   
+        });     
         return onv;
-    },
-
-    mkFn: function(args){
-      Function.prototype.constructor.apply(null, args);
-    },
-    mkBind: function( conf ){
-      // var fn = _.bind( Function('event', evt.value ), evt.el );
-      var args = [].concat(Object.keys(conf.args), 'event', evt.value);
-      var f = Function.prototype.constructor.apply(null, args);
-      var fn = _.bind.apply( null, Function('event', evt.value ), evt.el );
     }
 
   }
