@@ -1,5 +1,5 @@
 function clone(o) {
-  if (! (this instanceof clone)) {
+  if (!(this instanceof clone)) {
   	return new clone(o); 
   }
   for(p in o) {
