@@ -10,7 +10,9 @@
       "*"
   */
   function getNested(path, def, root){
-    var key, val = !!root? root : this, arr = String(path).split('.');
+    var key
+      , val = !!root? root : this
+      , arr = String(path).replace(/'|"|\]/g,'').replace(/\[/g,'.').split('.');
     while ((key = arr.shift()) && 'object' == typeof val && val) {
       val = 'undefined' == typeof val[key]? ('undefined' == typeof def? false : def) : val[key];
     }
